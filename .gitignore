@@ -1,0 +1,72 @@
+# **.gitignore for Swift Projects**
+
+This `.gitignore` file is optimized for Swift projects, ensuring that unnecessary files such as build outputs, user-specific settings, and system-generated files are not tracked.
+
+```
+# macOS System Files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode Project Files
+*.xcworkspace/
+*.xcuserstate
+xcuserdata/
+xcshareddata/
+*.xccheckout
+*.xcscheme
+*.xcscmblueprint
+*.xcscmblueprint
+*.xcschememanagement
+
+# Xcode Derived Data & Build Files
+DerivedData/
+.idea/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+build/
+*.o
+*.dSYM/
+*.swp
+*.lock
+*.log
+
+# Swift Package Manager (SPM)
+.swiftpm/
+.build/
+Package.resolved
+
+# CocoaPods
+Pods/
+*.xcworkspace
+podfile.lock
+
+# Carthage
+Carthage/
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+fastlane/*.lock
+
+# Ignore Archives
+*.xcarchive
+
+# Git / SSH / Security Files
+id_rsa
+id_rsa.pub
+*.pem
+*.crt
+*.key
+
+
+
+# Ignore SwiftLint Cache
+.swiftlint.yml
+.swiftlint_cache/
+
