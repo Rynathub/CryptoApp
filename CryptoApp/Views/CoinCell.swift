@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SDWebImage
 
 class CoinCell: UITableViewCell {
     
@@ -47,18 +48,9 @@ class CoinCell: UITableViewCell {
         self.coin = coin
         
         self.coinName.text = coin.name
+        self.coinLogo.sd_setImage(with: coin.logoURL)
+                    
         
-        DispatchQueue.global().async { [weak self] in
-            if let logoURL = coin.logoURL,
-               let imageViewData = try? Data(contentsOf: logoURL),
-               let logoImage = UIImage(data: imageViewData) {
-                DispatchQueue.main.async {
-                    self?.coinLogo.image = logoImage
-                }
-            }
-                
-            
-        }
     }
     
     private func setupUI() {
