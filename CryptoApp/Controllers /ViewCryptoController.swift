@@ -105,12 +105,8 @@ class ViewCryptoController: UIViewController {
         
         
         setupUI()
-        self.viewModel.onImageLoaded = { [weak self] logoImage in
-            DispatchQueue.main.async {
-                self?.coinLogo.image = logoImage
-            }
-            
-        }
+        
+        self.coinLogo.sd_setImage(with: self.viewModel.coin.logoURL)
         
     }
     
