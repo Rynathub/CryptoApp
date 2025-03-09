@@ -10,24 +10,16 @@ import UIKit
 
 class ViewCryptoControllerViewModel {
     
-    var onImageLoaded: ((UIImage?) -> Void)?
+    
     
     let coin: Coin
     
     init(_ coin: Coin) {
         self.coin = coin
-        self.loadImage()
+        
     }
     
-    private func loadImage() {
-        DispatchQueue.global().async {
-            if let logoURL = self.coin.logoURL {
-                let imageData = try? Data(contentsOf: logoURL)
-                let logoImage = UIImage(data: imageData!)
-                self.onImageLoaded?(logoImage)
-            }
-        }
-    }
+    
     
     var rankLabel: String {
         return "Rank: \(self.coin.rank)"
