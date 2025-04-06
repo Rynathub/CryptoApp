@@ -10,10 +10,12 @@ import UIKit
 class HomeController: UIViewController {
 
     private let viewModel: HomeControllerViewModel
+    var searchController: UISearchController = UISearchController(searchResultsController: nil)
     
     private let tableView: UITableView = {
         let tv = UITableView()
-        tv.backgroundColor = .systemBackground
+        tv.backgroundColor = UIColor(
+            red: 21 / 255.0, green: 22 / 255.0, blue: 24 / 255.0, alpha: 1.0)
         tv.register(CoinCell.self, forCellReuseIdentifier: CoinCell.identifier)
         return tv
     }()
@@ -29,6 +31,7 @@ class HomeController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setupSearchController()
         self.setupUI()
         
         
@@ -41,18 +44,36 @@ class HomeController: UIViewController {
                     self?.tableView.reloadData()
                 }
             }
-        viewModel.onErrorMessage = { [weak self] error in
+        viewModel.onErrorMessage = {  error in
                 // Show an alert or log the error
                 print("Error: \(error)")
             }
-        
+        self.searchController.searchBar.delegate = self
+        self.searchController.searchBar.showsBookmarkButton = true
+        self.searchController.searchBar.setImage(UIImage(systemName: "line.horizontal.3.decrease"), for: .bookmark, state: .normal)
         
     }
 
+    private func setupSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Coin"
+        
+        self.navigationItem.searchController = searchController
+        self.definesPresentationContext = false
+        self.navigationItem.hidesSearchBarWhenScrolling = false
+    }
+    
+    
+    
+    
+    // MARK: - UI Set UP
     
     private func setupUI() {
         self.navigationItem.title = "iCryptoPro"
-        self.view.backgroundColor = .systemBackground
+        self.view.backgroundColor = UIColor(
+            red: 21 / 255.0, green: 22 / 255.0, blue: 24 / 255.0, alpha: 1.0)
         
         self.view.addSubview(self.tableView)
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -68,17 +89,32 @@ class HomeController: UIViewController {
     }
 
 }
+// MARK: - Search Controller Functions
+
+extension HomeController: UISearchResultsUpdating,UISearchBarDelegate {
+    func updateSearchResults(for searchController: UISearchController) {
+        
+        self.viewModel.updateSearchController(searchBarText: searchController.searchBar.text)
+    }
+    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
+        print("Bookmark button clicked")
+    }
+}
 
 extension HomeController: UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.coins.count
+        let inSearchMode = self.viewModel.inSearchMode(searchController)
+        return inSearchMode ? self.viewModel.filteredCoins.count :
+        self.viewModel.allCoins.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CoinCell",for: indexPath) as? CoinCell else {
             fatalError("Unable to dequeue CoinCell in HomeController")
         }
-        let coin = viewModel.coins[indexPath.row]
+        let inSearchMode = self.viewModel.inSearchMode(searchController)
+        let coin = inSearchMode ? self.viewModel.filteredCoins[indexPath.row] : self.viewModel.allCoins[indexPath.row]
+        
         cell.configure(with: coin)
         
         return cell
@@ -90,8 +126,10 @@ extension HomeController: UITableViewDelegate,UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
+        let inSearchMode = self.viewModel.inSearchMode(searchController)
+        let coin = inSearchMode ? self.viewModel.filteredCoins[indexPath.row] : self.viewModel.allCoins[indexPath.row]
         
-        let coin = viewModel.coins[indexPath.row]
+//        let coin = viewModel.allCoins[indexPath.row]
         let vm = ViewCryptoControllerViewModel(coin)
         let destinationVC = ViewCryptoController(vm)
         self.navigationController?.pushViewController(destinationVC, animated: true)
