@@ -23,25 +23,31 @@ class CoinService {
             completion(.failure(CoinServiceError.unknown("Invalid request.")))
             return
         }
-        AF.request(url,method: endpoint.method,parameters: endpoint.queryItems,headers: endpoint.headers).validate().response { response in
-            if let error = response.error {
-                completion(.failure(CoinServiceError.unknown(error.localizedDescription)))
-            }
-            if let data = response.data {
+        AF.request(url,method: endpoint.method,parameters: endpoint.queryItems,headers: endpoint.headers).validate().responseData { response in
+            switch response.result {
+            case .success(let data):
                 let decoder = JSONDecoder()
                 do {
                     let decodedData = try decoder.decode(T.self, from: data)
                     completion(.success(decodedData))
-                } catch let err {
+                } catch let err{
+                    print("Decoding error :\(err.localizedDescription)")
                     completion(.failure(CoinServiceError.decodingError()))
-                    print(err.localizedDescription)
                 }
-            } else {
-                completion(.failure(CoinServiceError.unknown()))
+            case .failure:
+                if let data = response.data {
+                    let decoder = JSONDecoder()
+                    
+                    do {
+                        let coinError = try decoder.decode(CoinError.self, from: data)
+                        completion(.failure(coinError))
+                    } catch {
+                        completion(.failure(CoinServiceError.unknown("Failed to decode server error")))
+                    }
+                } else {
+                    completion(.failure(CoinServiceError.unknown("")))
+                }
             }
-            
         }
-        
     }
 }
-
