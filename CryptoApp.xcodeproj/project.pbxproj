@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		EB6DFBB12D722A910020DF73 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = EB6DFBB02D722A910020DF73 /* Alamofire */; };
 		EB84307C2D7A60460075F154 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = EB84307B2D7A60460075F154 /* SDWebImage */; };
+		EB84307F2D80E8B10075F154 /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = EB84307E2D80E8B10075F154 /* DGCharts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB84307C2D7A60460075F154 /* SDWebImage in Frameworks */,
+				EB84307F2D80E8B10075F154 /* DGCharts in Frameworks */,
 				EB6DFBB12D722A910020DF73 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -87,6 +89,7 @@
 			packageProductDependencies = (
 				EB6DFBB02D722A910020DF73 /* Alamofire */,
 				EB84307B2D7A60460075F154 /* SDWebImage */,
+				EB84307E2D80E8B10075F154 /* DGCharts */,
 			);
 			productName = CryptoApp;
 			productReference = EB5620262D6788B800A755D4 /* CryptoApp.app */;
@@ -119,6 +122,7 @@
 			packageReferences = (
 				EB6DFBAF2D722A910020DF73 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				EB84307A2D7A60460075F154 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				EB84307D2D80E8B00075F154 /* XCRemoteSwiftPackageReference "Charts" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EB5620272D6788B800A755D4 /* Products */;
@@ -164,6 +168,8 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphoneos*]" = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -190,6 +196,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -362,6 +369,14 @@
 				minimumVersion = 5.21.0;
 			};
 		};
+		EB84307D2D80E8B00075F154 /* XCRemoteSwiftPackageReference "Charts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielgindi/Charts.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -374,6 +389,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EB84307A2D7A60460075F154 /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
+		};
+		EB84307E2D80E8B10075F154 /* DGCharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EB84307D2D80E8B00075F154 /* XCRemoteSwiftPackageReference "Charts" */;
+			productName = DGCharts;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
