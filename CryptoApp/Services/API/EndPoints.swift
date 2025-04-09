@@ -79,7 +79,7 @@ enum EndPoints {
         switch self {
         case .fetchCoins:
             return [
-                        "limit": "150",
+                        "limit": "75",
                         "sort": "market_cap",
                         "convert": "USD",
                         "aux": "cmc_rank,max_supply,circulating_supply,total_supply",

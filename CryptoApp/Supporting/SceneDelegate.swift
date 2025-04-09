@@ -21,9 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.rootViewController =  UINavigationController(rootViewController: HomeController())
         self.window = window
         self.window?.makeKeyAndVisible()
-        if #available(iOS 13.0, *) {
-            window.overrideUserInterfaceStyle = .dark
-        }
+        ThemeManager.shared.setupInitialTheme()
         
         
         SDImageCache.shared.config.maxDiskSize = 1000000 * 24

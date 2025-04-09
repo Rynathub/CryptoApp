@@ -54,8 +54,7 @@ class CoinCell: UITableViewCell {
     }
     
     private func setupUI() {
-        self.backgroundColor = UIColor(
-            red: 21 / 255.0, green: 22 / 255.0, blue: 24 / 255.0, alpha: 1.0)
+        self.backgroundColor = UIColor.primaryCellColor
         self.addSubview(coinLogo)
         self.addSubview(coinName)
         

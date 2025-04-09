@@ -55,19 +55,16 @@ extension HomeControllerViewModel {
         return isActive && !searchText.isEmpty
     }   
     func updateSearchController(searchBarText: String?) {
-        // If `searchBarText` is nil or empty after lowercasing, just show all coins
         guard let searchText = searchBarText?.lowercased(), !searchText.isEmpty else {
             self.filteredCoins = allCoins
             self.coinsUpdated?()
             return
         }
 
-        // Filter
         self.filteredCoins = allCoins.filter {
             $0.name.lowercased().contains(searchText)
         }
 
-        // Sort
         self.filteredCoins = filteredCoins.sorted {
             let lhs = $0.name.lowercased()
             let rhs = $1.name.lowercased()

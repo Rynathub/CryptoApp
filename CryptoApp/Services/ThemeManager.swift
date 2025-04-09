@@ -8,22 +8,24 @@
 import Foundation
 import UIKit
 
+enum Theme: String {
+    case dark,light
+    
+    var userInterfaceStyle:UIUserInterfaceStyle {
+        switch self {
+        case .dark: return .dark
+        case .light: return .light
+        }
+    }
+}
+
 class ThemeManager {
     
     static let shared = ThemeManager();private init() {}
     
-    enum Theme: String {
-        case dark,light
-        
-        var userInterfaceStyle:UIUserInterfaceStyle {
-            switch self {
-            case .dark: return .dark
-            case .light: return .light
-            }
-        }
-    }
-    
     private let selectedThemeKey = "selectedAppTheme"
+    
+    var onThemeChanged: (() -> Void)?
     
     var currentTheme:Theme {
         get {
@@ -33,7 +35,9 @@ class ThemeManager {
             return .dark
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: selectedThemeKey)
+            UserDefaults.standard.set(newValue.rawValue, forKey: selectedThemeKey)
+            onThemeChanged?()
+            applyTheme(newValue)
         }
     }
     
@@ -46,6 +50,21 @@ class ThemeManager {
             }
         }
     }
+    
+    func color(for colorName:String) -> UIColor {
+        return UIColor { [weak self] _ in
+            let currentStyle = self?.currentTheme.userInterfaceStyle ?? .dark
+            
+            let traitCollection = UITraitCollection(userInterfaceStyle: currentStyle)
+            
+            return UIColor(named: colorName,in: nil,compatibleWith: traitCollection) ?? .black
+        }
+    }
+    
+    func toggleTheme() {
+        currentTheme = (currentTheme == .light) ? .dark : .light
+    }
+    
     func setupInitialTheme() {
         applyTheme(currentTheme)
     }

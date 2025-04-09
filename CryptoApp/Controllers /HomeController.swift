@@ -14,10 +14,19 @@ class HomeController: UIViewController {
     
     private let tableView: UITableView = {
         let tv = UITableView()
-        tv.backgroundColor = UIColor(
-            red: 21 / 255.0, green: 22 / 255.0, blue: 24 / 255.0, alpha: 1.0)
+        tv.backgroundColor = UIColor.appBackground
         tv.register(CoinCell.self, forCellReuseIdentifier: CoinCell.identifier)
         return tv
+    }()
+    
+     lazy var themeButton: UIButton = {
+         let button = UIButton(type: .custom)
+         let imageName = (ThemeManager.shared.currentTheme == .dark) ? "sun.max.circle" : "moon.circle"
+             let baseImage = UIImage(systemName: imageName)?.withRenderingMode(.alwaysTemplate)
+             button.setImage(baseImage, for: .normal)
+             button.tintColor = (ThemeManager.shared.currentTheme == .dark) ? .systemYellow : .systemIndigo
+             button.addTarget(self, action: #selector(themeButtonTapped), for: .touchUpInside)
+        return button
     }()
     
     init(_ viewModel: HomeControllerViewModel = HomeControllerViewModel()) {
@@ -31,6 +40,7 @@ class HomeController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.barTintColor = UIColor.appBackground
         self.setupSearchController()
         self.setupUI()
         
@@ -49,16 +59,19 @@ class HomeController: UIViewController {
                 print("Error: \(error)")
             }
         self.searchController.searchBar.delegate = self
-        self.searchController.searchBar.showsBookmarkButton = true
-        self.searchController.searchBar.setImage(UIImage(systemName: "line.horizontal.3.decrease"), for: .bookmark, state: .normal)
         
     }
 
     private func setupSearchController() {
+
+        
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.searchBar.placeholder = "Search Coin"
+        self.searchController.searchBar.showsBookmarkButton = true
+        self.searchController.searchBar.setImage(UIImage(systemName: "line.horizontal.3.decrease"), for: .bookmark, state: .normal)
+        
         
         self.navigationItem.searchController = searchController
         self.definesPresentationContext = false
@@ -71,9 +84,12 @@ class HomeController: UIViewController {
     // MARK: - UI Set UP
     
     private func setupUI() {
+        setupThemeTapCallBack()
         self.navigationItem.title = "iCryptoPro"
-        self.view.backgroundColor = UIColor(
-            red: 21 / 255.0, green: 22 / 255.0, blue: 24 / 255.0, alpha: 1.0)
+        self.navigationController?.navigationBar.barTintColor = UIColor.appBackground
+        let themeBarButton = UIBarButtonItem(customView: themeButton)
+            navigationItem.rightBarButtonItem = themeBarButton
+        self.view.backgroundColor = UIColor.appBackground
         
         self.view.addSubview(self.tableView)
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -88,6 +104,41 @@ class HomeController: UIViewController {
         
     }
 
+}
+
+
+extension HomeController {
+    
+    func setupThemeTapCallBack() {
+        ThemeManager.shared.onThemeChanged = { [weak self] in
+            self?.updateThemeButtonImage()
+        }
+    }
+    
+    func updateThemeButtonImage() {
+        // Determine the new image based on the current theme.
+        let newImageName = (ThemeManager.shared.currentTheme == .dark) ? "sun.max.circle" : "moon.circle"
+        guard let newImage = UIImage(systemName: newImageName) else { return }
+        
+        let tintedImage: UIImage
+            if newImageName == "sun.max.circle" {
+                tintedImage = newImage.withTintColor(.systemYellow, renderingMode: .alwaysOriginal)
+            } else {
+                tintedImage = newImage.withTintColor(.systemIndigo, renderingMode: .alwaysOriginal)
+            }
+
+        UIView.transition(with: themeButton,
+                          duration: 0.5,
+                          options: .curveEaseInOut,
+                          animations: {
+                                self.themeButton.setImage(tintedImage, for: .normal)
+                          },
+                          completion: nil)
+    }
+    
+    @objc func themeButtonTapped() {
+        ThemeManager.shared.toggleTheme()
+    }
 }
 // MARK: - Search Controller Functions
 
@@ -129,7 +180,6 @@ extension HomeController: UITableViewDelegate,UITableViewDataSource {
         let inSearchMode = self.viewModel.inSearchMode(searchController)
         let coin = inSearchMode ? self.viewModel.filteredCoins[indexPath.row] : self.viewModel.allCoins[indexPath.row]
         
-//        let coin = viewModel.allCoins[indexPath.row]
         let vm = ViewCryptoControllerViewModel(coin)
         let destinationVC = ViewCryptoController(vm)
         self.navigationController?.pushViewController(destinationVC, animated: true)

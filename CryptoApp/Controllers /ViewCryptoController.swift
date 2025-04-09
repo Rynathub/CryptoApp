@@ -145,7 +145,7 @@ class ViewCryptoController: UIViewController, ChartViewDelegate {
     
     private let timeConstrainLabel: UILabel = {
         let lb = UILabel()
-        lb.textColor = .lightGray
+        lb.textColor = UIColor.appText
         lb.font = .systemFont(ofSize: 16, weight: .semibold)
         lb.text = "Today"
         return lb
@@ -199,7 +199,7 @@ class ViewCryptoController: UIViewController, ChartViewDelegate {
     
     private let activityLabel: UILabel = {
         let lb = UILabel()
-        lb.textColor = .white
+        lb.textColor = UIColor.appText
         lb.font = .systemFont(ofSize: 24, weight: .semibold)
         lb.textAlignment = .left
         lb.text = "Bitcoin activity"
@@ -262,7 +262,7 @@ class ViewCryptoController: UIViewController, ChartViewDelegate {
     
     private let rankValue: UILabel = {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = UIColor.appText
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 18, weight: .medium)
         return label
@@ -270,7 +270,7 @@ class ViewCryptoController: UIViewController, ChartViewDelegate {
     
     private let volumeValue: UILabel = {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = UIColor.appText
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 18, weight: .medium)
         return label
@@ -278,7 +278,7 @@ class ViewCryptoController: UIViewController, ChartViewDelegate {
     
     private let maxSupplyValue: UILabel = {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = UIColor.appText
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 18, weight: .medium)
         return label
@@ -286,7 +286,7 @@ class ViewCryptoController: UIViewController, ChartViewDelegate {
     
     private let marketCapValue: UILabel = {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = UIColor.appText
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 18, weight: .medium)
         return label
@@ -294,7 +294,7 @@ class ViewCryptoController: UIViewController, ChartViewDelegate {
     
     private let marketDetailsLabel: UILabel = {
         let lb = UILabel()
-        lb.textColor = .label
+        lb.textColor = UIColor.appText
         lb.font = .systemFont(ofSize: 25, weight: .semibold)
         lb.text = "Market details"
         return lb
@@ -346,8 +346,7 @@ class ViewCryptoController: UIViewController, ChartViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        self.view.backgroundColor = UIColor(
-            red: 21 / 255.0, green: 22 / 255.0, blue: 24 / 255.0, alpha: 1.0)
+        self.view.backgroundColor = UIColor.appBackground
 
         configureNavigationBar()
         
@@ -364,6 +363,8 @@ class ViewCryptoController: UIViewController, ChartViewDelegate {
         self.coinName.text = viewModel.coin.name
         
         self.symbolLabel.text = viewModel.nameSymLabel2
+        
+        self.activityLabel.text = "\(viewModel.coin.name) activity"
 
         setupUI()
         
@@ -439,7 +440,6 @@ class ViewCryptoController: UIViewController, ChartViewDelegate {
         
     }
     @objc private func showActionSheet() {
-//        let vc = CustomSheetVC()
         let navVC = UINavigationController(rootViewController: customSheet)
         
         
@@ -459,8 +459,6 @@ class ViewCryptoController: UIViewController, ChartViewDelegate {
         self.view.addSubview(scrollView)
         self.scrollView.addSubview(contentView)
         self.contentView.addSubview(priceStack)
-//        self.contentView.addSubview(priceLabel)
-        //        self.contentView.addSubview(coinLogo)
         self.contentView.addSubview(lineChartView)
         self.contentView.addSubview(usersBalanceStack)
         self.contentView.addSubview(marketDetailsLabel)
@@ -471,8 +469,6 @@ class ViewCryptoController: UIViewController, ChartViewDelegate {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
         priceStack.translatesAutoresizingMaskIntoConstraints = false
-//        priceLabel.translatesAutoresizingMaskIntoConstraints = false
-//        coinLogo.translatesAutoresizingMaskIntoConstraints = false
         lineChartView.translatesAutoresizingMaskIntoConstraints = false
         usersBalanceStack.translatesAutoresizingMaskIntoConstraints = false
         marketDetailsLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -567,29 +563,25 @@ extension ViewCryptoController {
         lineChartView.chartDescription.enabled = false
         lineChartView.legend.enabled = false
 
-        // 2. Disable grid lines and axis lines
         lineChartView.xAxis.drawGridLinesEnabled = false
         lineChartView.leftAxis.drawGridLinesEnabled = false
         lineChartView.rightAxis.drawGridLinesEnabled = false
 
-        // 3. Hide axis labels
         lineChartView.xAxis.drawLabelsEnabled = false
         lineChartView.leftAxis.drawLabelsEnabled = false
         lineChartView.rightAxis.drawLabelsEnabled = false
-        // 4. Remove borders / axis lines
+        
         lineChartView.xAxis.drawAxisLineEnabled = true
         lineChartView.leftAxis.drawAxisLineEnabled = false
         lineChartView.rightAxis.drawAxisLineEnabled = false
         
-        // Removes default padding around the edges
         lineChartView.setViewPortOffsets(left: 0, top: 0, right: 0, bottom: 0)
 
-        // 5. Disable zoom/pan if desired
         lineChartView.setScaleEnabled(false)
         lineChartView.pinchZoomEnabled = false
         lineChartView.dragEnabled = false
 
-        // 6. Optional: Remove touch highlights
+       
         lineChartView.highlightPerTapEnabled = true
         lineChartView.highlightPerDragEnabled = true
         
@@ -598,33 +590,30 @@ extension ViewCryptoController {
         lineChartView.marker = circleMarker
 
 
-        // 7. Optional: Adjust chart offsets if you want the line to fill the view
+        //  Optional: Adjust chart offsets if you want the line to fill the view
 //        lineChartView.setViewPortOffsets(left: 0, top: 0, right: 0, bottom: 0)
         lineChartView.noDataText = "Loading chart data..."
         lineChartView.noDataTextColor = .lightGray
-        // 8. Set background color to match your design
-        // (If you have a dark background, set it here)
-        lineChartView.backgroundColor = UIColor(
-            red: 21 / 255.0, green: 22 / 255.0, blue: 24 / 255.0, alpha: 1.0)
+        lineChartView.backgroundColor = UIColor.appBackground
     }
 
     private func loadChartData() {
         let dataSet = LineChartDataSet(
             entries: viewModel.dataEntries, label: "")
         
-        dataSet.colors = [.systemBlue]  // Line color
-        dataSet.lineWidth = 2.0  // Line thickness
-        dataSet.drawValuesEnabled = false  // Hide value labels on points
-        dataSet.drawCirclesEnabled = false  // Hide circles on each data point
+        dataSet.colors = [.systemBlue]
+        dataSet.lineWidth = 2.0
+        dataSet.drawValuesEnabled = false
+        dataSet.drawCirclesEnabled = false
         dataSet.drawHorizontalHighlightIndicatorEnabled = false
         dataSet.highlightLineWidth = 2.0
         dataSet.lineWidth = 3.0
         dataSet.mode = .cubicBezier
         dataSet.highlightColor = .systemBlue
-        // Optionally fill the area under the line (solid color or gradient)
+        
         dataSet.drawFilledEnabled = true
-        dataSet.fillColor = .systemBlue.withAlphaComponent(0.5)  // Slightly transparent
-        // Create chart data object
+        dataSet.fillColor = .systemBlue.withAlphaComponent(0.5)
+       
 
         // Set data for the chart
         let lineData = LineChartData(dataSet: dataSet)

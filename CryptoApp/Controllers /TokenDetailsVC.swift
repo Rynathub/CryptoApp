@@ -241,8 +241,7 @@ class TokenDetailsVC: UIViewController {
     }()
     
     func setUpUI() {
-        self.view.backgroundColor = UIColor(
-            red: 21 / 255.0, green: 22 / 255.0, blue: 24 / 255.0, alpha: 1.0)
+        self.view.backgroundColor = UIColor.appBackground
         
         self.view.addSubview(mainBarStack)
         self.view.addSubview(closeButton)

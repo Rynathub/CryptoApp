@@ -41,8 +41,7 @@ class CustomSheetVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(
-            red: 21 / 255.0, green: 22 / 255.0, blue: 24 / 255.0, alpha: 1.0)
+        view.backgroundColor = UIColor.appBackground
         setUI()
         addButtons()
     }
